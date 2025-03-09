@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../assets/logo.png';
 
-const MindlancerUI = () => {
+const Landing = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
@@ -122,7 +122,7 @@ const MindlancerUI = () => {
             <section id="freelancers" className="pr-30 pl-30 w-full py-16 bg-white">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Join our platform</h2>
-                    <div className="flex flex-col md:flex-row items-center">
+                    <div className="flex flex-col gap-10 md:flex-row items-center">
                         <div className="md:w-1/2 mb-10 md:mb-0 flex flex-col items-center">
                             <div className="flex flex-col items-center p-6 bg-blue-50 rounded-2xl shadow-md">
                                 <div className="mb-4 p-4 bg-blue-100 rounded-full">
@@ -295,4 +295,4 @@ const MindlancerUI = () => {
     );
 };
 
-export default MindlancerUI;
+export default Landing
