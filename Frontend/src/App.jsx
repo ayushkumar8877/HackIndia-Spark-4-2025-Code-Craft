@@ -3,17 +3,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import './index.css'
 import Landing from './components/Landing';
-import Dashboard from './components/Admin/Dashboard';
-import Sidebar from './components/Sidebar';
-import Freesignup from './components/Auth/Freelancersignup';
-import Businesssignup from './components/Auth/Buisnesssignup';
-import AdminPanel from './components/Admin/AdminPannel';
-import FreelancerProfileSetup from './components/Auth/Freelancerprofile';
-import BusinessProfileSetup from './components/Auth/Businessprofile';
+import Sidebar from './components/Admin/Sidebar';
+import AdminPanel from './components/Admin/Dashboard';
 import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard } from 'lucide-react';
 import ErrorPage from './components/ErrorPage';
 import FreelancerSignup from './components/Auth/Freelancersignup';
-import BusinessSignup from './components/Auth/Buisnesssignup';
+import Dashboard from './components/Admin/Dashboard';
+import FreelancerDashboard from './components/Freelancer/freecomponents/FreelancerDashboard';
+import FreeSidebar from './components/Freelancer/Freelancersidebar';
 
 const menuItems = [
   { icon: Activity, label: 'Dashboard', path: '/' },
@@ -23,7 +20,6 @@ const menuItems = [
   { icon: FileText, label: 'Contracts', path: '/contracts' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
-
 const router = createBrowserRouter([
   {
     path: "*",
@@ -42,6 +38,17 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/admin/dashboard",
+    element: (
+      <div className="flex h-screen bg-gray-50">
+        <Sidebar menuItems={menuItems} />
+        <div className="flex-1 overflow-auto">
+          <Dashboard />
+        </div>
+      </div>
+    ),
+  },
+  {
     path: "/freelancer/auth",
     element: (
       <div>
@@ -52,27 +59,17 @@ const router = createBrowserRouter([
   {
     path: "/freelancer/dashboard",
     element: (
-      <div>
-        <FreelancerSignup />
+      <div className='flex flex-row'>
+        <FreeSidebar freemenuItems={menuItems} />
+        <FreelancerDashboard />
       </div>
     ),
   },
   {
-    path: "/business/auth",
+    path: "/admin/dashboard",
     element: (
       <div>
-        <BusinessSignup />
-      </div>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <div className="flex h-screen bg-gray-50">
-        <Sidebar menuItems={menuItems} />
-        <div className="flex-1 overflow-auto">
-          <Dashboard />
-        </div>
+        <AdminPanel />
       </div>
     ),
   },
