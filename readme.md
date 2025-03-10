@@ -9,8 +9,20 @@
 <li>AI based recommendation system for freelancers</li>
 <li>Chat/Video Call feature for client-company interaction</li>
 <li>Efficient job posting for companies </li>
+<li>Chat feature for freelancers and companies
+<li>
 
 <h2>Tech Stack</h2>
 <li><b>Frontend:</b> React JS, Tailwind CSS</li>
 <li><b>Backend:</b> Express JS, Mongo DB, passport JS</li>
-<li><b>AI-ML:</b> Scikit Learn, Flask</li>
+<li><b>AI-ML:</b> Scikit Learn,Python,Flask</li>
+
+
+<h2>Usage</h2>
+<li>Freelancers can sign up and create a profile on Github,LinkedIn,etc</li>
+<li>Companies can post jobs and interact with freelancers</li>
+<li>AI will provide recommendations to freelancers based on their skills and job requirements</li>
+<li>The freelancers can apply for the same </li>
+<li>The companies can then hire them for the projects</li>
+
+
