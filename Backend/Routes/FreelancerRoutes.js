@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 // Models
 const Freelancer = require("../Models/Freelancers");
+const Applications = require("../Models/Applications");
 
 // Hash Password
 const hashPassword = async (password) => {
@@ -58,6 +59,17 @@ router.post("/login", async (req, res) => {
       .send({ status: "success", id: freelancer._id, name: freelancer.name });
   } catch (err) {
     res.status(500).send(err);
+  }
+});
+
+// Submit application
+router.post("/apply", async (req, res) => {
+  try {
+    const application = new Applications(req.body);
+    await application.save();
+    res.status(200).send({ status: "success" });
+  } catch (err) {
+    console.log(err);
   }
 });
 

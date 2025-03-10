@@ -174,7 +174,6 @@ function ChatPage() {
         </div>
       </main>
       
-      
     </div>
   );
 }
