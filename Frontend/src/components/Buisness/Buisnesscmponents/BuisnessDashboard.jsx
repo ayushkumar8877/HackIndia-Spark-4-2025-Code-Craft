@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Users, Briefcase, DollarSign, Clock } from 'lucide-react';
 
@@ -12,12 +12,16 @@ const hiringData = [
 ];
 
 function BusinessDashboard() {
+  const [data, setData] = useState({
+    name: localStorage.getItem('businessName'),
+  });
+
   return (
     <div className="p-8 space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Business Dashboard</h1>
-          <p className="text-gray-500">Tech Solutions Inc.</p>
+          <p className="text-gray-500">{data.name}</p>
         </div>
         <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
           Post New Job
