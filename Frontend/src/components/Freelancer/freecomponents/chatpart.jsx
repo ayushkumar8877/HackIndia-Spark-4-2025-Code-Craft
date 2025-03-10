@@ -174,19 +174,6 @@ function ChatPage() {
         </div>
       </main>
       
-      {/* Footer */}
-      <footer className="w-full bg-gray-900 text-white py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between">
-            <div>© 2025 FreelanceHub. All rights reserved.</div>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-gray-300">Terms</a>
-              <a href="#" className="hover:text-gray-300">Privacy</a>
-              <a href="#" className="hover:text-gray-300">Help</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
