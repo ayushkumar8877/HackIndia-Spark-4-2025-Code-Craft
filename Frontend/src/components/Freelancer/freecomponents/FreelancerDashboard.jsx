@@ -1,8 +1,9 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Briefcase, Clock, Star, DollarSign } from 'lucide-react';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import JobSearchModal from './Jobsearch';
+import ApplicationConfirmModal from './jobapply';
 
 const earningsData = [
   { month: 'Jan', amount: 2400 },
@@ -26,6 +27,10 @@ function FreelancerDashboard() {
     username: "",
   });
   const [auth, setAuth] = useState(localStorage.getItem('auth'));
+  const [isJobSearchOpen, setIsJobSearchOpen] = useState(false);
+  const [isApplicationOpen, setIsApplicationOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const getCookie = (name) => {
     return document.cookie
@@ -46,8 +51,34 @@ function FreelancerDashboard() {
     }
   }, []);
 
+  const handleJobApply = (job) => {
+    setSelectedJob(job);
+    setIsApplicationOpen(true);
+  };
+
+  const handleApplicationSubmit = (applicationData) => {
+    console.log('Application submitted:', applicationData);
+    
+    // Show success message
+    setSuccessMessage(`Your application for ${selectedJob.title} has been submitted!`);
+    
+    // Clear success message after 5 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 5000);
+  };
+
   return (
     <div className="p-8 space-y-8 overflow-y-auto">
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md z-50 animate-fade-in">
+          <div className="flex items-center">
+            <Check className="w-5 h-5 mr-2" />
+            <span>{successMessage}</span>
+          </div>
+        </div>
+      )}
+    
       <div className="flex items-center justify-between">
         <div>
           <div>
@@ -56,7 +87,10 @@ function FreelancerDashboard() {
           </div>
         </div>
         <div className="flex gap-4">
-          <button className="px-4 py-2 text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">
+          <button 
+            onClick={() => setIsJobSearchOpen(true)} 
+            className="px-4 py-2 text-white  bg-gray-700 rounded-lg hover:bg-primary-100 transition-colors"
+          >
             Find Jobs
           </button>
           <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
@@ -228,6 +262,20 @@ function FreelancerDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <JobSearchModal 
+        isOpen={isJobSearchOpen} 
+        onClose={() => setIsJobSearchOpen(false)} 
+        onApply={handleJobApply}
+      />
+      
+      <ApplicationConfirmModal 
+        isOpen={isApplicationOpen}
+        job={selectedJob}
+        onClose={() => setIsApplicationOpen(false)}
+        onSubmit={handleApplicationSubmit}
+      />
     </div>
   );
 }
