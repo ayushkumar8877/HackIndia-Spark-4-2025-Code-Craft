@@ -8,7 +8,7 @@
 <li>Freelancer and Company dashboard with statistics</li>
 <li>AI based recommendation system for freelancers</li>
 <li>Chat/Video Call feature for client-company interaction</li>
-<li>Efficient job posting fir companies </li>
+<li>Efficient job posting for companies </li>
 
 <h2>Tech Stack</h2>
 <li><b>Frontend:</b> React JS, Tailwind CSS</li>
