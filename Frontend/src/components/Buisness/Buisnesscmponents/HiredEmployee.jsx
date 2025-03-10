@@ -9,7 +9,7 @@ const HirePage = () => {
     project: "",
     salary: "",
     deadline: "",
-    skills: ""
+    skills: "",
   });
 
   const handleChange = (e) => {
@@ -27,6 +27,7 @@ const HirePage = () => {
         salary: formData.salary,
         deadline: formData.deadline,
         skills: formData.skills.split(",").map((skill) => skill.trim()),
+        businessId: localStorage.getItem("businessId"),
       });
       if (response.data.success) {
         alert("Employee added successfully");
@@ -38,7 +39,8 @@ const HirePage = () => {
 
   const fetchHiredEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/business/hire");
+      const id = localStorage.getItem('businessId')
+      const response = await axios.get(`http://localhost:3000/business/hire?id=${id}`);
       setHiredEmployees(response.data);
     } catch (err) {
       console.log(err)
@@ -139,7 +141,7 @@ const HirePage = () => {
               </tr>
             </thead>
             <tbody>
-              {hiredEmployees.map((employee) => (
+              {hiredEmployees && hiredEmployees.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-50">
                   <td className="p-3 border-b">{employee.name}</td>
                   <td className="p-3 border-b">{employee.project}</td>
@@ -159,6 +161,16 @@ const HirePage = () => {
                   </td>
                 </tr>
               ))}
+
+              {
+                !hiredEmployees && (
+                  <tr>
+                    <td colSpan="5" className="p-3 text-center text-gray-500">
+                      No employees hired yet
+                    </td>
+                  </tr>
+                )
+              }
             </tbody>
           </table>
         </div>

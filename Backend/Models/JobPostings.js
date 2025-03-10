@@ -30,6 +30,7 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  businessId: { type: String, required: true }, // Business ID
   postedOn: {
     type: Date,
     default: Date.now,

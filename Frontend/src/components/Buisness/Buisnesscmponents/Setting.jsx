@@ -12,7 +12,7 @@ const BusinessProfileSettings = () => {
     logo: null,
     currentLogoUrl: null
   });
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -25,7 +25,7 @@ const BusinessProfileSettings = () => {
         // Replace with actual API call
         // const response = await fetch('/api/business/profile');
         // const data = await response.json();
-        
+
         // Simulated data for demo purposes
         const data = {
           industry: 'technology',
@@ -37,7 +37,7 @@ const BusinessProfileSettings = () => {
           contactPhone: '+1 (555) 123-4567',
           currentLogoUrl: '/images/company-logo.png'
         };
-        
+
         setProfileData(data);
         setIsLoading(false);
       } catch (error) {
@@ -46,7 +46,7 @@ const BusinessProfileSettings = () => {
         setIsLoading(false);
       }
     };
-    
+
     fetchProfileData();
   }, []);
 
@@ -70,7 +70,7 @@ const BusinessProfileSettings = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     // Here you would typically send the data to your backend
     // For example:
     // const formData = new FormData();
@@ -79,7 +79,7 @@ const BusinessProfileSettings = () => {
     //     formData.append(key, profileData[key]);
     //   }
     // });
-    
+
     // Simulate API call with a timeout
     setTimeout(() => {
       console.log('Updated business profile data:', profileData);
@@ -102,7 +102,7 @@ const BusinessProfileSettings = () => {
   return (
     <div className="w-full min-h-screen bg-white">
       {/* Header */}
-      <header className="w-full bg-gray-900 text-white p-6">
+      <header className="w-full text-gray-900 p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold">Business Profile Settings</h1>
         </div>
@@ -126,7 +126,7 @@ const BusinessProfileSettings = () => {
           {/* Profile Form */}
           <form onSubmit={handleSubmit}>
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Company Information</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-700">Industry</label>
@@ -150,7 +150,7 @@ const BusinessProfileSettings = () => {
                   <option value="other">Other</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-700">Company Size</label>
                 <select
@@ -168,7 +168,7 @@ const BusinessProfileSettings = () => {
                   <option value="501+">501+ employees</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-700">Location</label>
                 <input
@@ -181,7 +181,7 @@ const BusinessProfileSettings = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-700">Company Website</label>
                 <input
@@ -193,7 +193,7 @@ const BusinessProfileSettings = () => {
                   placeholder="https://your-company.com"
                 />
               </div>
-              
+
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-700">Contact Phone</label>
                 <input
@@ -206,7 +206,7 @@ const BusinessProfileSettings = () => {
                   required
                 />
               </div>
-              
+
               <div className="md:col-span-2">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Company Description</label>
                 <textarea
@@ -219,7 +219,7 @@ const BusinessProfileSettings = () => {
                   required
                 ></textarea>
               </div>
-              
+
               <div className="md:col-span-2">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Hiring Needs</label>
                 <textarea
@@ -232,24 +232,24 @@ const BusinessProfileSettings = () => {
                   required
                 ></textarea>
               </div>
-              
+
               <div className="md:col-span-2">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Company Logo</label>
-                
+
                 {/* Show current logo if available */}
                 {profileData.currentLogoUrl && (
                   <div className="mb-4">
                     <p className="text-sm text-gray-500 mb-2">Current logo:</p>
                     <div className="w-24 h-24 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={profileData.currentLogoUrl} 
-                        alt="Company logo" 
+                      <img
+                        src={profileData.currentLogoUrl}
+                        alt="Company logo"
                         className="max-w-full max-h-full object-contain"
                       />
                     </div>
                   </div>
                 )}
-                
+
                 <div className="flex items-center justify-center w-full">
                   <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -259,10 +259,10 @@ const BusinessProfileSettings = () => {
                       <p className="mb-1 text-sm text-gray-500">Click to upload a new logo</p>
                       <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 2MB)</p>
                     </div>
-                    <input 
-                      id="dropzone-file" 
-                      type="file" 
-                      className="hidden" 
+                    <input
+                      id="dropzone-file"
+                      type="file"
+                      className="hidden"
                       onChange={handleFileChange}
                     />
                   </label>
@@ -274,7 +274,7 @@ const BusinessProfileSettings = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="flex gap-4">
               <button
                 type="button"
@@ -302,7 +302,7 @@ const BusinessProfileSettings = () => {
           </form>
         </div>
       </main>
-      
+
       {/* Footer */}
       <footer className="w-full bg-gray-100 py-6">
         <div className="max-w-6xl mx-auto px-6 text-center text-gray-600">

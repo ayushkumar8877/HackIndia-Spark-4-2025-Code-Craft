@@ -6,11 +6,11 @@ const ChatPage = () => {
     { id: 2, sender: 'company', content: 'Great! Do you have any questions about the timeline?', timestamp: '10:32 AM' },
     { id: 3, sender: 'freelancer', content: 'Yes, I noticed the deadline is quite tight. Would it be possible to extend it by a week?', timestamp: '10:35 AM' },
   ]);
-  
+
   const [newMessage, setNewMessage] = useState('');
   const [activeChat, setActiveChat] = useState('John Doe');
   const messagesEndRef = useRef(null);
-  
+
   const chats = [
     { id: 1, name: 'John Doe', role: 'UI/UX Designer', status: 'online', unread: 0, lastMessage: '10:35 AM' },
     { id: 2, name: 'Sarah Miller', role: 'Full Stack Developer', status: 'offline', unread: 2, lastMessage: 'Yesterday' },
@@ -29,14 +29,14 @@ const ChatPage = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (newMessage.trim() === '') return;
-    
+
     const newMsg = {
       id: messages.length + 1,
       sender: 'company',
       content: newMessage,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    
+
     setMessages([...messages, newMsg]);
     setNewMessage('');
   };
@@ -50,7 +50,7 @@ const ChatPage = () => {
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="w-full bg-gray-900 text-white p-4">
+      <header className="w-full text-gray-900 p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold">Company Dashboard</h1>
           <div className="flex items-center space-x-4">
@@ -72,22 +72,22 @@ const ChatPage = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden flex h-[75vh]">
           {/* Sidebar - Chat List */}
           <div className="w-1/4 border-r border-gray-200">
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-10 border-b border-gray-200">
               <div className="relative">
-                <input 
-                  type="text" 
-                  placeholder="Search conversations..." 
-                  className="w-full p-2 pl-8 border border-gray-300 rounded-lg text-sm"
+                <input
+                  type="text"
+                  placeholder="Search conversations..."
+                  className="w-full p-2 mt-3 pl-8 border border-gray-300 rounded-lg text-sm"
                 />
-                <svg className="w-4 h-4 absolute left-2 top-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4 h-4 mt-3 absolute left-2 top-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
             </div>
-            
+
             <div className="overflow-y-auto h-[calc(75vh-72px)]">
               {chats.map((chat) => (
-                <div 
+                <div
                   key={chat.id}
                   className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition ${activeChat === chat.name ? 'bg-blue-50' : ''}`}
                   onClick={() => setActiveChat(chat.name)}
@@ -95,10 +95,9 @@ const ChatPage = () => {
                   <div className="flex items-start">
                     <div className="relative">
                       <img src="/api/placeholder/40/40" alt={chat.name} className="w-10 h-10 rounded-full" />
-                      <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-                        chat.status === 'online' ? 'bg-green-500' : 
+                      <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${chat.status === 'online' ? 'bg-green-500' :
                         chat.status === 'away' ? 'bg-yellow-500' : 'bg-gray-500'
-                      }`}></span>
+                        }`}></span>
                     </div>
                     <div className="ml-3 flex-1">
                       <div className="flex justify-between items-center">
@@ -120,9 +119,9 @@ const ChatPage = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Main Chat Area */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 pt-10 flex flex-col">
             {/* Chat Header */}
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center">
@@ -150,31 +149,29 @@ const ChatPage = () => {
                 </button>
               </div>
             </div>
-            
+
             {/* Messages Area */}
             <div className="flex-1 p-4 overflow-y-auto">
               <div className="space-y-4">
                 {messages.map((message) => (
-                  <div 
-                    key={message.id} 
+                  <div
+                    key={message.id}
                     className={`flex ${message.sender === 'company' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className={`max-w-xs lg:max-w-md ${
-                      message.sender === 'company' 
-                        ? 'bg-blue-600 text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg' 
-                        : 'bg-gray-200 text-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg'
-                    } p-3`}>
+                    <div className={`max-w-xs lg:max-w-md ${message.sender === 'company'
+                      ? 'bg-blue-600 text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg'
+                      : 'bg-gray-200 text-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg'
+                      } p-3`}>
                       <p className="text-sm">{message.content}</p>
-                      <p className={`text-xs mt-1 text-right ${
-                        message.sender === 'company' ? 'text-blue-200' : 'text-gray-500'
-                      }`}>{message.timestamp}</p>
+                      <p className={`text-xs mt-1 text-right ${message.sender === 'company' ? 'text-blue-200' : 'text-gray-500'
+                        }`}>{message.timestamp}</p>
                     </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
               </div>
             </div>
-            
+
             {/* Message Input */}
             <div className="p-4 border-t border-gray-200">
               <form onSubmit={handleSendMessage} className="flex items-end space-x-2">
@@ -193,7 +190,7 @@ const ChatPage = () => {
                     rows="1"
                   ></textarea>
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
@@ -210,7 +207,7 @@ const ChatPage = () => {
             <div className="p-4 border-b border-gray-200">
               <h3 className="font-medium text-gray-800">Project Details</h3>
             </div>
-            
+
             <div className="p-4">
               <div className="mb-6">
                 <h4 className="text-xs uppercase text-gray-500 font-medium mb-2">Current Project</h4>
@@ -225,7 +222,7 @@ const ChatPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mb-6">
                 <h4 className="text-xs uppercase text-gray-500 font-medium mb-2">Attachments</h4>
                 <div className="space-y-2">
@@ -249,7 +246,7 @@ const ChatPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="text-xs uppercase text-gray-500 font-medium mb-2">Freelancer Info</h4>
                 <div className="bg-gray-50 p-3 rounded-lg">
@@ -260,7 +257,7 @@ const ChatPage = () => {
                       <p className="text-xs text-gray-500">UI/UX Designer</p>
                     </div>
                   </div>
-                  
+
                   <div className="text-sm text-gray-600">
                     <div className="flex items-center mb-1">
                       <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -288,7 +285,7 @@ const ChatPage = () => {
           </div>
         </div>
       </main>
-      
+
       {/* Footer */}
       <footer className="w-full bg-gray-100 py-4 mt-auto">
         <div className="max-w-7xl mx-auto px-4 text-center text-gray-600 text-sm">

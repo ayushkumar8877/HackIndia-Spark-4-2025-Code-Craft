@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
 const Business = require("../Models/Business");
 const JobPostings = require("../Models/JobPostings");
 const Employees = require("../Models/Employees");
+const Applications = require("../Models/Applications");
 
 // Signup
 router.post("/signup", async (req, res) => {
@@ -64,8 +65,9 @@ router.post("/postings", async (req, res) => {
 
 // Get job postings
 router.get("/postings", async (req, res) => {
+  const id = req.query.id;
   try {
-    const jobs = await JobPostings.find();
+    const jobs = await JobPostings.find({ businessId: id });
     res.json(jobs);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -85,6 +87,7 @@ router.delete("/postings/:id", async (req, res) => {
 // Hire employees
 router.post("/hire", async (req, res) => {
   try {
+    console.log(req.body);
     const employee = new Employees(req.body);
     await employee.save();
     res.json({ success: true });
@@ -95,9 +98,32 @@ router.post("/hire", async (req, res) => {
 
 // Fetch hired employees
 router.get("/hire", async (req, res) => {
+  const id = req.query.id;
   try {
-    const employees = await Employees.find();
+    const employees = await Employees.find({ businessId: id });
     res.json(employees);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Display applications
+router.get("/applications", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const applications = await Applications.find({ companyId: id });
+    res.json(applications);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Update application status
+router.put("/applications", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const application = await Applications.findByIdAndUpdate(id);
+    res.send({ success: true });
   } catch (err) {
     console.log(err);
   }

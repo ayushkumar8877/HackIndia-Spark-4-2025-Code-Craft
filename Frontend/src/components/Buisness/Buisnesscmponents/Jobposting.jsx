@@ -11,7 +11,7 @@ const JobPostingPage = () => {
     salary: "",
     deadline: "",
     urgent: false,
-    location: ""
+    location: "",
   });
 
   const handleChange = (e) => {
@@ -34,6 +34,7 @@ const JobPostingPage = () => {
         deadline: formData.deadline,
         urgent: formData.urgent,
         location: formData.location,
+        businessId: localStorage.getItem("businessId"),
         postedOn: new Date()
       });
       if (response.data.success === true) {
@@ -56,7 +57,8 @@ const JobPostingPage = () => {
 
   const fetchPostings = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/business/postings");
+      const id = localStorage.getItem('businessId')
+      const response = await axios.get(`http://localhost:3000/business/postings?id=${id}`);
       setJobPostings(response.data);
     } catch (err) {
       console.log(err)
@@ -195,7 +197,7 @@ const JobPostingPage = () => {
 
       {/* Job Postings List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobPostings.map((job) => {
+        {jobPostings && jobPostings.map((job) => {
           const daysRemaining = getDaysRemaining(job.deadline);
 
           return (
@@ -255,7 +257,7 @@ const JobPostingPage = () => {
         })}
 
         {
-          jobPostings.length === 0 && (
+          !jobPostings && (
             <div className="col-span-3 text-center text-gray-600">
               No job postings available
             </div>
