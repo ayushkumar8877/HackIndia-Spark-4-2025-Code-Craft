@@ -12,6 +12,8 @@ import FreelancerProfileSetup from './components/Auth/Freelancerprofile';
 import BusinessProfileSetup from './components/Auth/Businessprofile';
 import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard } from 'lucide-react';
 import ErrorPage from './components/ErrorPage';
+import FreelancerSignup from './components/Auth/Freelancersignup';
+import BusinessSignup from './components/Auth/Buisnesssignup';
 
 const menuItems = [
   { icon: Activity, label: 'Dashboard', path: '/' },
@@ -21,6 +23,7 @@ const menuItems = [
   { icon: FileText, label: 'Contracts', path: '/contracts' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
+
 const router = createBrowserRouter([
   {
     path: "*",
@@ -35,6 +38,30 @@ const router = createBrowserRouter([
     element: (
       <div>
         <Landing />
+      </div>
+    ),
+  },
+  {
+    path: "/freelancer/auth",
+    element: (
+      <div>
+        <FreelancerSignup />
+      </div>
+    ),
+  },
+  {
+    path: "/freelancer/dashboard",
+    element: (
+      <div>
+        <FreelancerSignup />
+      </div>
+    ),
+  },
+  {
+    path: "/business/auth",
+    element: (
+      <div>
+        <BusinessSignup />
       </div>
     ),
   },
