@@ -6,6 +6,7 @@ import Landing from './components/Landing';
 import Dashboard from './components/Dashboard';
 import Sidebar from './components/Sidebar';
 import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard } from 'lucide-react';
+import ErrorPage from './components/ErrorPage';
 
 const menuItems = [
   { icon: Activity, label: 'Dashboard', path: '/' },
@@ -17,6 +18,14 @@ const menuItems = [
 ];
 const router = createBrowserRouter([
   {
+    path: "*",
+    element: (
+      <div>
+        <ErrorPage />
+      </div>
+    ),
+  },
+  {
     path: "/",
     element: (
       <div>
@@ -25,14 +34,14 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard",
+    path: "/admin/dashboard",
     element: (
       <div className="flex h-screen bg-gray-50">
-      <Sidebar menuItems={menuItems} />
-      <div className="flex-1 overflow-auto">
-        <Dashboard />
+        <Sidebar menuItems={menuItems} />
+        <div className="flex-1 overflow-auto">
+          <Dashboard />
+        </div>
       </div>
-    </div>
     ),
   },
 ]);

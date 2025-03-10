@@ -134,7 +134,7 @@ const Landing = () => {
                                 <p className="mb-4 text-gray-600 text-center">
                                     Access high-quality tech projects from companies worldwide. Showcase your skills and get matched with opportunities that fit your expertise.
                                 </p>
-                                <a href="/freelancer-login" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-md text-center transition duration-300">
+                                <a href="/freelancer/auth" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-md text-center transition duration-300">
                                     Get Started
                                 </a>
                             </div>
