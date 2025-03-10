@@ -5,7 +5,10 @@ import './index.css'
 import Landing from './components/Landing';
 import Sidebar from './components/Admin/Sidebar';
 import AdminPanel from './components/Admin/Dashboard';
-import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard, IndianRupee, MessageCircle } from 'lucide-react';
+import BlacklistPage from './components/Admin/Blacklist';
+import BusinessPage from './components/Admin/Business';
+import FreelancerPage from './components/Admin/Freelancer';
+import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard, IndianRupee, MessageCircle, Building, Ban } from 'lucide-react';
 import ErrorPage from './components/ErrorPage';
 import FreelancerSignup from './components/Auth/Freelancersignup';
 import Dashboard from './components/Admin/Dashboard';
@@ -25,12 +28,10 @@ import BuisnessChat from './components/Buisness/Buisnesscmponents/Chat';
 import BuisnessSidebar from './components/Buisness/BuisnessSidebar';
 import BusinessSignup from './components/Auth/Buisnesssignup';
 const menuItems = [
-  { icon: Activity, label: 'Dashboard', path: '/' },
-  { icon: LayoutDashboard, label: 'Freelancer Dashboard', path: '/freelancer-dashboard' },
-  { icon: Users, label: 'Business Dashboard', path: '/business-dashboard' },
-  { icon: Briefcase, label: 'Jobs', path: '/jobs' },
-  { icon: FileText, label: 'Contracts', path: '/contracts' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: Activity, label: 'Dashboard', path: '/admin/dashboard' },
+  { icon: Users, label: 'Freelancers', path: '/admin/freelancer' },
+  { icon: Building, label: 'Business Dashboard', path: '/admin/business' },
+  { icon: Ban, label: 'Blacklist', path: '/admin/blacklist' },
 ];
 
 const freemenuItems = [
@@ -75,6 +76,39 @@ const router = createBrowserRouter([
         <Sidebar menuItems={menuItems} />
         <div className="flex-1 overflow-auto">
           <Dashboard />
+        </div>
+      </div>
+    ),
+  },
+  {
+    path: "/admin/blacklist",
+    element: (
+      <div className="flex h-screen bg-gray-50">
+        <Sidebar menuItems={menuItems} />
+        <div className="flex-1 overflow-auto">
+          <BlacklistPage />
+        </div>
+      </div>
+    ),
+  },
+  {
+    path: "/admin/freelancer",
+    element: (
+      <div className="flex h-screen bg-gray-50">
+        <Sidebar menuItems={menuItems} />
+        <div className="flex-1 overflow-auto">
+          <FreelancerPage />
+        </div>
+      </div>
+    ),
+  },
+  {
+    path: "/admin/business",
+    element: (
+      <div className="flex h-screen bg-gray-50">
+        <Sidebar menuItems={menuItems} />
+        <div className="flex-1 overflow-auto">
+          <BusinessPage />
         </div>
       </div>
     ),
