@@ -44,7 +44,7 @@ const freemenuItems = [
 
 const BuisnessmenuItems = [
   { icon: Users, label: 'Business Dashboard', path: '/Business/dashboard' },
-  { icon: Briefcase, label: 'Contracts', path: "/Business/jobposting", },
+  { icon: Briefcase, label: 'Job Postings', path: "/Business/jobposting", },
   { icon: FileText, label: 'Application', path: "/Business/application", },
   { icon: Users, label: 'HiredEmployee', path: "/Business/HiredEmployee", },
   { icon: MessageCircle, label: 'Chat', path: "/Business/chat", },

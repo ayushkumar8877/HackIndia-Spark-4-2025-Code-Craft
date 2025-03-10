@@ -1,32 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const HirePage = () => {
-  const [hiredEmployees, setHiredEmployees] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      project: "Website Redesign",
-      salary: 75000,
-      deadline: "2025-05-15",
-      skills: ["React", "TypeScript", "UI/UX"]
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      project: "Mobile App Development",
-      salary: 85000,
-      deadline: "2025-06-30",
-      skills: ["React Native", "Firebase", "Redux"]
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      project: "E-commerce Platform",
-      salary: 92000,
-      deadline: "2025-07-20",
-      skills: ["Node.js", "MongoDB", "AWS"]
-    }
-  ]);
+  const [hiredEmployees, setHiredEmployees] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -41,31 +17,42 @@ const HirePage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newEmployee = {
-      id: hiredEmployees.length + 1,
-      name: formData.name,
-      project: formData.project,
-      salary: parseFloat(formData.salary),
-      deadline: formData.deadline,
-      skills: formData.skills.split(',').map(skill => skill.trim())
-    };
-    
-    setHiredEmployees([...hiredEmployees, newEmployee]);
-    setFormData({
-      name: "",
-      project: "",
-      salary: "",
-      deadline: "",
-      skills: ""
-    });
+    try {
+      console.log(formData);
+      const response = await axios.post("http://localhost:3000/business/hire", {
+        name: formData.name,
+        project: formData.project,
+        salary: formData.salary,
+        deadline: formData.deadline,
+        skills: formData.skills.split(",").map((skill) => skill.trim()),
+      });
+      if (response.data.success) {
+        alert("Employee added successfully");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const fetchHiredEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/business/hire");
+      setHiredEmployees(response.data);
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchHiredEmployees();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Employee Hiring Management</h1>
-      
+
       {/* Add New Hire Form */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4 text-gray-700">Add New Hire</h2>
@@ -136,7 +123,7 @@ const HirePage = () => {
           </button>
         </form>
       </div>
-      
+
       {/* Hired Employees List */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-gray-700">Hired Employees</h2>
@@ -161,8 +148,8 @@ const HirePage = () => {
                   <td className="p-3 border-b">
                     <div className="flex flex-wrap gap-1">
                       {employee.skills.map((skill, index) => (
-                        <span 
-                          key={index} 
+                        <span
+                          key={index}
                           className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
                         >
                           {skill}
