@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 router.get("/", (req, res) => {
   res.send("Business Route");
@@ -8,26 +9,31 @@ router.get("/", (req, res) => {
 // Import models
 const Business = require("../Models/Business");
 
-// Create a new business
-router.post("/", async (req, res) => {
-  const { data } = req.body;
+// Signup
+router.post("/signup", async (req, res) => {
+  const data = req.body; // Fixed destructuring
+  console.log(data);
   try {
+    if (await Business.findOne({ email: data.email })) {
+      return res.status(400).json({ error: "Business already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const business = new Business({
       ...data,
       password: hashedPassword,
     });
     await business.save();
-    res.json(business);
+    res.json({ success: true });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-// Login a business
+// Login
 router.post("/login", async (req, res) => {
   try {
-    const business = await Business.findOne(req.body.email);
+    const business = await Business.findOne({ email: req.body.email }); // Fixed findOne
     if (!business) {
       throw new Error("Business not found");
     }
@@ -37,7 +43,7 @@ router.post("/login", async (req, res) => {
       throw new Error("Password is incorrect");
     }
 
-    res.json({ success: true, id: business._id });
+    res.json({ success: true, id: business._id, name: business.name });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

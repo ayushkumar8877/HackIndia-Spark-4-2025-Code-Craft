@@ -14,7 +14,6 @@ const hashPassword = async (password) => {
 // Signup
 router.post("/signup", async (req, res) => {
   const data = req.body;
-  console.log(data);
   try {
     if (await Freelancer.findOne({ email: data.email })) {
       return res.json({
@@ -24,7 +23,6 @@ router.post("/signup", async (req, res) => {
     }
     data.password = await hashPassword(data.password);
     const freelancer = new Freelancer(data);
-    console.log(freelancer);
     await freelancer.save();
     res.status(200).send({ status: "success" });
   } catch (err) {
