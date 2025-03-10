@@ -3,8 +3,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import './index.css'
 import Landing from './components/Landing';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Admin/Dashboard';
 import Sidebar from './components/Sidebar';
+import Freesignup from './components/Auth/Freelancersignup';
+import Businesssignup from './components/Auth/Buisnesssignup';
+import AdminPanel from './components/Admin/AdminPannel';
+import FreelancerProfileSetup from './components/Auth/Freelancerprofile';
+import BusinessProfileSetup from './components/Auth/Businessprofile';
 import { Activity, Users, Briefcase, FileText, Settings, LayoutDashboard } from 'lucide-react';
 import ErrorPage from './components/ErrorPage';
 
@@ -34,7 +39,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin/dashboard",
+    path: "/dashboard",
     element: (
       <div className="flex h-screen bg-gray-50">
         <Sidebar menuItems={menuItems} />
