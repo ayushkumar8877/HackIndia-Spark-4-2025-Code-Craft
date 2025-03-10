@@ -14,7 +14,7 @@ function FreeSidebar({ freemenuItems }) {
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 px-4 py-6 flex flex-col justify-between h-screen sticky">
+    <div className=" sticky top-0 left-0 w-64 bg-white border-r border-gray-200 px-4 py-6 flex flex-col justify-between h-screen ">
       {/* Top Section: Brand */}
       <div>
         <div className="flex items-center gap-3 mb-8">

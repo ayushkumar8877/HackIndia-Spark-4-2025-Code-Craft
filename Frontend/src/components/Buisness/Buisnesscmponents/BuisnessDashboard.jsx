@@ -18,7 +18,7 @@ function BusinessDashboard() {
 
   return (
     <div className="p-8 space-y-8">
-      <div className="flex items-center justify-between">
+      <div className=" flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Business Dashboard</h1>
           <p className="text-gray-500">{data.name}</p>
