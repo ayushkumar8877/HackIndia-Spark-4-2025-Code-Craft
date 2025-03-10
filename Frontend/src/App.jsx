@@ -171,7 +171,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/Buisness/application",
+    path: "/Business/application",
     element: (
       <div className='flex flex-row'>
         <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
