@@ -11,6 +11,7 @@ const Business = require("../Models/Business");
 const JobPostings = require("../Models/JobPostings");
 const Employees = require("../Models/Employees");
 const Applications = require("../Models/Applications");
+const BusinessProfile = require("../Models/BusinessProfile");
 
 // Signup
 router.post("/signup", async (req, res) => {
@@ -120,12 +121,80 @@ router.get("/applications", async (req, res) => {
 
 // Update application status
 router.put("/applications", async (req, res) => {
-  const id = req.query.id;
+  const { id, status } = req.body; // Destructure request body
+
   try {
-    const application = await Applications.findByIdAndUpdate(id);
-    res.send({ success: true });
+    const application = await Applications.findByIdAndUpdate(
+      id,
+      { status }, // Correct format for updating fields
+      { new: true } // Ensure it returns the updated document
+    );
+
+    if (!application) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Application not found" });
+    }
+
+    res.json({ success: true, application });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Add Business Profile
+router.post("/profile", async (req, res) => {
+  try {
+    const profile = new BusinessProfile(req.body);
+    await profile.save();
+    res.json({ success: true });
   } catch (err) {
     console.log(err);
+  }
+});
+
+// Check if profile is there or not
+router.get("/checkprofile", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const isPresent = await BusinessProfile.findOne({ companyId: id });
+    if (isPresent) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Get Profile Details
+router.get("/profile", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const profile = await BusinessProfile.findOne({ companyId: id });
+    res.json(profile);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Update profile details
+router.put("/profile", async (req, res) => {
+  const { companyId, ...data } = req.body; // Destructure request body
+
+  try {
+    const profile = await BusinessProfile.findOneAndUpdate(
+      { companyId },
+      data, // Correct format for updating fields
+      { new: true, upsert: true } // Ensure it returns the updated document and creates if not found
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 

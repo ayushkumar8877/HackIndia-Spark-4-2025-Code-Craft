@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const BusinessProfileSettings = () => {
   const [profileData, setProfileData] = useState({
+    companyId: localStorage.getItem("businessId"),
     industry: '',
     companySize: '',
     description: '',
@@ -9,46 +11,12 @@ const BusinessProfileSettings = () => {
     hiringNeeds: '',
     location: '',
     contactPhone: '',
-    logo: null,
-    currentLogoUrl: null
   });
+  const [profileFlag, setProfileFlag] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [id, setId] = useState(localStorage.getItem("businessId"))
+
   const [message, setMessage] = useState({ type: '', text: '' });
-
-  // Simulated fetch of existing profile data
-  useEffect(() => {
-    // In a real application, this would be an API call to fetch the user's profile
-    const fetchProfileData = async () => {
-      try {
-        setIsLoading(true);
-        // Replace with actual API call
-        // const response = await fetch('/api/business/profile');
-        // const data = await response.json();
-
-        // Simulated data for demo purposes
-        const data = {
-          industry: 'technology',
-          companySize: '11-50',
-          description: 'We build innovative solutions for small businesses.',
-          website: 'https://example.com',
-          hiringNeeds: 'Looking for frontend developers with React experience.',
-          location: 'New York, USA',
-          contactPhone: '+1 (555) 123-4567',
-          currentLogoUrl: '/images/company-logo.png'
-        };
-
-        setProfileData(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-        setMessage({ type: 'error', text: 'Failed to load profile data. Please try again.' });
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfileData();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,46 +26,82 @@ const BusinessProfileSettings = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      setProfileData({
-        ...profileData,
-        logo: e.target.files[0]
-      });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/business/profile', {
+        companyId: localStorage.getItem("businessId"),
+        industry: profileData.industry,
+        companySize: profileData.companySize,
+        description: profileData.description,
+        website: profileData.website,
+        hiringNeeds: profileData.hiringNeeds,
+        location: profileData.location,
+        contactPhone: profileData.contactPhone,
+      })
+
+
+      if (response.data.success) {
+        alert("Profile updated successfully!")
+      }
+    } catch (err) {
+      console.log(err)
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Here you would typically send the data to your backend
-    // For example:
-    // const formData = new FormData();
-    // Object.keys(profileData).forEach(key => {
-    //   if (key !== 'currentLogoUrl' && profileData[key] !== null) {
-    //     formData.append(key, profileData[key]);
-    //   }
-    // });
-
-    // Simulate API call with a timeout
-    setTimeout(() => {
-      console.log('Updated business profile data:', profileData);
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  if (isLoading && Object.values(profileData).every(value => value === '' || value === null)) {
-    return (
-      <div className="w-full min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your profile...</p>
-        </div>
-      </div>
-    );
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put('http://localhost:3000/business/profile', {
+        companyId: localStorage.getItem("businessId"),
+        industry: profileData.industry,
+        companySize: profileData.companySize,
+        description: profileData.description,
+        website: profileData.website,
+        hiringNeeds: profileData.hiringNeeds,
+        location: profileData.location,
+        contactPhone: profileData.contactPhone,
+      })
+      if (response.data.success) {
+        alert("Profile updated successfully!")
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
+
+  const checkProfile = async () => {
+    try {
+      const id = localStorage.getItem('businessId')
+      const response = await axios.get(`http://localhost:3000/business/checkprofile?id=${id}`)
+      if (response.data.success === true) {
+        setProfileFlag(true)
+      } else {
+        setProfileFlag(false)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const fetchProfileDetails = async () => {
+    try {
+      const id = localStorage.getItem('businessId')
+      const response = await axios.get(`http://localhost:3000/business/profile?id=${id}`)
+      setProfileData(response.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    checkProfile()
+  }, []);
+
+  useEffect(() => {
+    if (profileFlag) {
+      fetchProfileDetails()
+    }
+  }, [profileFlag])
 
   return (
     <div className="w-full min-h-screen bg-white">
@@ -124,7 +128,7 @@ const BusinessProfileSettings = () => {
           )}
 
           {/* Profile Form */}
-          <form onSubmit={handleSubmit}>
+          <form>
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Company Information</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -232,47 +236,6 @@ const BusinessProfileSettings = () => {
                   required
                 ></textarea>
               </div>
-
-              <div className="md:col-span-2">
-                <label className="block mb-2 text-sm font-medium text-gray-700">Company Logo</label>
-
-                {/* Show current logo if available */}
-                {profileData.currentLogoUrl && (
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-500 mb-2">Current logo:</p>
-                    <div className="w-24 h-24 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                      <img
-                        src={profileData.currentLogoUrl}
-                        alt="Company logo"
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <svg className="w-8 h-8 mb-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                      </svg>
-                      <p className="mb-1 text-sm text-gray-500">Click to upload a new logo</p>
-                      <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 2MB)</p>
-                    </div>
-                    <input
-                      id="dropzone-file"
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
-                {profileData.logo && (
-                  <p className="mt-2 text-sm text-green-600">
-                    New logo selected: {profileData.logo.name}
-                  </p>
-                )}
-              </div>
             </div>
 
             <div className="flex gap-4">
@@ -284,19 +247,10 @@ const BusinessProfileSettings = () => {
                 Cancel
               </button>
               <button
-                type="submit"
+                onClick={profileFlag ? handleUpdate : handleSubmit}
                 className="flex-1 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium"
-                disabled={isLoading}
               >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Saving...
-                  </span>
-                ) : 'Save Changes'}
+                Save
               </button>
             </div>
           </form>

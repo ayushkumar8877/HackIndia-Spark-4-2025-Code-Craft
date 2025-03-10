@@ -3,6 +3,7 @@ import axios from "axios";
 
 const ApplicationPage = () => {
   const [applications, setApplications] = useState([]);
+  const [filteredApplications, setFilteredApplications] = useState([]);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -10,24 +11,21 @@ const ApplicationPage = () => {
     status: "",
     skills: "",
     firstApplied: false,
-    sortBy: "date"
+    sortBy: "date",
   });
 
-  // Filtered applications
-  const [filteredApplications, setFilteredApplications] = useState(applications);
-
   // List of unique projects
-  const projects = [...new Set(applications.map(app => app.project))];
+  const projects = [...new Set(applications.map((app) => app.project))];
 
   // List of unique statuses
-  const statuses = [...new Set(applications.map(app => app.status))];
+  const statuses = [...new Set(applications.map((app) => app.status))];
 
   // Handle filter changes
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -35,32 +33,32 @@ const ApplicationPage = () => {
   useEffect(() => {
     let result = [...applications];
 
-    // Filter by project
+    // **Filter by project**
     if (filters.project) {
-      result = result.filter(app => app.project === filters.project);
+      result = result.filter((app) => app.project === filters.project);
     }
 
-    // Filter by status
+    // **Filter by status**
     if (filters.status) {
-      result = result.filter(app => app.status === filters.status);
+      result = result.filter((app) => app.status === filters.status);
     }
 
-    // Filter by skills
-    if (filters.skills) {
-      const skillsArray = filters.skills.toLowerCase().split(',').map(skill => skill.trim());
-      result = result.filter(app =>
-        app.skills.some(skill =>
-          skillsArray.some(s => skill.toLowerCase().includes(s))
+    // **Filter by skills**
+    if (filters.skills.trim()) {
+      const skillsArray = filters.skills.toLowerCase().split(",").map((skill) => skill.trim());
+      result = result.filter((app) =>
+        app.skills.some((skill) =>
+          skillsArray.some((s) => skill.toLowerCase().includes(s))
         )
       );
     }
 
-    // Filter by first applied
+    // **Filter by firstApplied**
     if (filters.firstApplied) {
-      result = result.filter(app => app.firstApplied);
+      result = result.filter((app) => app.firstApplied === true);
     }
 
-    // Sort applications
+    // **Sorting**
     if (filters.sortBy === "date") {
       result.sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
     } else if (filters.sortBy === "experience") {
@@ -70,28 +68,41 @@ const ApplicationPage = () => {
     setFilteredApplications(result);
   }, [filters, applications]);
 
-  // Update application status
-  const updateStatus = (id, newStatus) => {
-    setApplications(prevApplications =>
-      prevApplications.map(app =>
-        app.id === id ? { ...app, status: newStatus } : app
-      )
-    );
+  // **Update application status**
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const response = await axios.put("http://localhost:3000/business/applications", {
+        id,
+        status: newStatus,
+      });
+
+      if (response.data.success) {
+        alert("Status updated successfully");
+        fetchApplications(); // Refresh applications without reloading the page
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Error updating status");
+    }
   };
 
+  // **Fetch applications**
   const fetchApplications = async () => {
     try {
-      const id = localStorage.getItem('businessId')
-      const response = await axios.get(`http://localhost:3000/business/applications?id=${id}`)
+      const id = localStorage.getItem("businessId");
+      const response = await axios.get(`http://localhost:3000/business/applications?id=${id}`);
       setApplications(response.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     fetchApplications();
   }, []);
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -155,20 +166,6 @@ const ApplicationPage = () => {
               <option value="experience">Experience</option>
             </select>
           </div>
-        </div>
-
-        <div className="mt-4 flex items-center">
-          <input
-            type="checkbox"
-            id="firstApplied"
-            name="firstApplied"
-            checked={filters.firstApplied}
-            onChange={handleFilterChange}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label htmlFor="firstApplied" className="ml-2 block text-sm text-gray-700">
-            First Come First Serve
-          </label>
         </div>
 
         <div className="mt-4">
@@ -259,7 +256,7 @@ const ApplicationPage = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <select
                       value={application.status}
-                      onChange={(e) => updateStatus(application.id, e.target.value)}
+                      onChange={(e) => updateStatus(application._id, e.target.value)}
                       className="mr-2 p-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="Pending">Pending</option>
@@ -267,9 +264,6 @@ const ApplicationPage = () => {
                       <option value="Hired">Hired</option>
                       <option value="Rejected">Rejected</option>
                     </select>
-                    <button className="text-indigo-600 hover:text-indigo-900 mr-2">
-                      View
-                    </button>
                   </td>
                 </tr>
               ))}
