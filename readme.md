@@ -17,6 +17,61 @@
 <li><b>Backend:</b> Express JS, Mongo DB, passport JS</li>
 <li><b>AI-ML:</b> Scikit Learn,Python,Flask</li>
 
+<h2>Project Structure</h2>
+<p>
+  mindlancer/
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   └── assets/
+│   └── src/
+│       ├── assets/
+│       │   └── logo.png
+│       ├── components/
+│       │   ├── auth/
+│       │   ├── dashboard/
+│       │   ├── chat/
+│       │   └── jobs/
+│       ├── pages/
+│       │   ├── Home.tsx
+│       │   ├── FreelancerDashboard.tsx
+│       │   └── CompanyDashboard.tsx
+│       ├── services/
+│       │   ├── api.ts
+│       │   └── auth.ts
+│       ├── utils/
+│       ├── App.tsx
+│       └── index.tsx
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   ├── authController.ts
+│   │   │   ├── jobController.ts
+│   │   │   └── userController.ts
+│   │   ├── models/
+│   │   │   ├── User.ts
+│   │   │   └── Job.ts
+│   │   ├── routes/
+│   │   │   ├── auth.ts
+│   │   │   └── api.ts
+│   │   ├── middleware/
+│   │   │   └── auth.ts
+│   │   ├── config/
+│   │   │   └── passport.ts
+│   │   └── app.ts
+│   └── package.json
+├── ml-service/
+│   ├── src/
+│   │   ├── models/
+│   │   │   └── recommender.py
+│   │   ├── utils/
+│   │   │   └── data_processing.py
+│   │   └── app.py
+│   └── requirements.txt
+└── README.md
+</p>
+
+
 
 <h2>Usage</h2>
 <li>Freelancers can sign up and create a profile on Github,LinkedIn,etc</li>
@@ -24,5 +79,4 @@
 <li>AI will provide recommendations to freelancers based on their skills and job requirements</li>
 <li>The freelancers can apply for the same </li>
 <li>The companies can then hire them for the projects</li>
-
 
