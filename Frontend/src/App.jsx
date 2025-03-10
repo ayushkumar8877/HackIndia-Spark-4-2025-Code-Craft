@@ -16,6 +16,13 @@ import FreePortfolioPage from './components/Freelancer/freecomponents/Portfolio'
 import FreeChatPage from './components/Freelancer/freecomponents/chatpart';
 import FreeJobPage from './components/Freelancer/freecomponents/job';
 import FreeSettings from './components/Freelancer/freecomponents/Settings';
+import BusinessDashboard from './components/Buisness/Buisnesscmponents/BuisnessDashboard';
+import HiredEmployee from './components/Buisness/Buisnesscmponents/HiredEmployee';
+import Jobposting from './components/Buisness/Buisnesscmponents/Jobposting';
+import Application from './components/Buisness/Buisnesscmponents/Application';
+import BuisnessSettings from './components/Buisness/Buisnesscmponents/Setting';
+import BuisnessChat from './components/Buisness/Buisnesscmponents/Chat';
+import BuisnessSidebar from './components/Buisness/BuisnessSidebar';
 const menuItems = [
   { icon: Activity, label: 'Dashboard', path: '/' },
   { icon: LayoutDashboard, label: 'Freelancer Dashboard', path: '/freelancer-dashboard' },
@@ -35,12 +42,12 @@ const freemenuItems = [
 ];
 
 const BuisnessmenuItems = [
-  { icon: Activity, label: 'Dashboard', path: '/' },
-  { icon: LayoutDashboard, label: 'Freelancer Dashboard', path: '/freelancer-dashboard' },
-  { icon: Users, label: 'Business Dashboard', path: '/business-dashboard' },
-  { icon: Briefcase, label: 'Jobs', path: '/jobs' },
-  { icon: FileText, label: 'Contracts', path: '/contracts' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: Users, label: 'Business Dashboard', path: '/Business/dashboard' },
+  { icon: Briefcase, label: 'Contracts', path: "/Business/jobposting", },
+  { icon: FileText, label: 'Application', path: "/Business/application", },
+  { icon: Users, label: 'HiredEmployee', path: "/Business/HiredEmployee", },
+  { icon: MessageCircle, label: 'Chat', path: "/Business/chat", },
+  { icon: Settings, label: 'Settings', path: '/Business/settings' },
 ];
 
 const router = createBrowserRouter([
@@ -71,6 +78,7 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+  // frelancer
   {
     path: "/freelancer/auth",
     element: (
@@ -133,6 +141,63 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+
+  // Buisness
+  {
+    path: "/Business/dashboard",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <BusinessDashboard />
+      </div>
+    ),
+  },
+  {
+    path: "/Business/HiredEmployee",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <HiredEmployee />
+      </div>
+    ),
+  },
+  {
+    path: "/Business/jobposting",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <Jobposting />
+      </div>
+    ),
+  },
+  {
+    path: "/Buisness/application",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <Application />
+      </div>
+    ),
+  },
+  {
+    path: "/Business/chat",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <BuisnessChat />
+      </div>
+    ),
+  },
+  {
+    path: "/Business/settings",
+    element: (
+      <div className='flex flex-row'>
+        <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
+        <BuisnessSettings/>
+      </div>
+    ),
+  },
+  
   {
     path: "/admin/dashboard",
     element: (
