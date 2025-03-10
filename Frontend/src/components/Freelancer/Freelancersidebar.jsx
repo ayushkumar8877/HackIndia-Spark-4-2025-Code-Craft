@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Briefcase } from 'lucide-react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 function FreeSidebar({ freemenuItems }) {
   const location = useLocation();
