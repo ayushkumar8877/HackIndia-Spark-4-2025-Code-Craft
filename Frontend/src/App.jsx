@@ -23,6 +23,7 @@ import Application from './components/Buisness/Buisnesscmponents/Application';
 import BuisnessSettings from './components/Buisness/Buisnesscmponents/Setting';
 import BuisnessChat from './components/Buisness/Buisnesscmponents/Chat';
 import BuisnessSidebar from './components/Buisness/BuisnessSidebar';
+import BusinessSignup from './components/Auth/Buisnesssignup';
 const menuItems = [
   { icon: Activity, label: 'Dashboard', path: '/' },
   { icon: LayoutDashboard, label: 'Freelancer Dashboard', path: '/freelancer-dashboard' },
@@ -144,6 +145,14 @@ const router = createBrowserRouter([
 
   // Buisness
   {
+    path: "/Business/auth",
+    element: (
+      <div className='flex flex-row'>
+        <BusinessSignup />
+      </div>
+    ),
+  },
+  {
     path: "/Business/dashboard",
     element: (
       <div className='flex flex-row'>
@@ -193,11 +202,11 @@ const router = createBrowserRouter([
     element: (
       <div className='flex flex-row'>
         <BuisnessSidebar BuisnessmenuItems={BuisnessmenuItems} />
-        <BuisnessSettings/>
+        <BuisnessSettings />
       </div>
     ),
   },
-  
+
   {
     path: "/admin/dashboard",
     element: (

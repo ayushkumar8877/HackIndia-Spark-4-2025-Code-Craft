@@ -1,6 +1,8 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Briefcase, Clock, Star, DollarSign } from 'lucide-react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const earningsData = [
   { month: 'Jan', amount: 2400 },
@@ -20,12 +22,38 @@ const projectData = [
 const COLORS = ['#0ea5e9', '#d946ef', '#eab308'];
 
 function FreelancerDashboard() {
+  const [userData, setUserData] = useState({
+    username: "",
+  });
+  const [auth, setAuth] = useState(localStorage.getItem('auth'));
+
+  const getCookie = (name) => {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(name + "="))
+      ?.split("=")[1];
+  };
+
+  useEffect(() => {
+    if (auth == true) {
+      setUserData({
+        username: getCookie("username"),
+      });
+    } else {
+      setUserData({
+        username: localStorage.getItem("freelancerName"),
+      });
+    }
+  }, []);
+
   return (
     <div className="p-8 space-y-8 overflow-y-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Freelancer Dashboard</h1>
-          <p className="text-gray-500">Welcome back, John Doe</p>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Freelancer Dashboard</h1>
+            <p className="text-gray-500">Welcome back, {userData.username}</p>
+          </div>
         </div>
         <div className="flex gap-4">
           <button className="px-4 py-2 text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">

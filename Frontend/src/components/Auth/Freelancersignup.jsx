@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router
+import axios from 'axios';
 
 const FreelancerSignup = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const FreelancerSignup = () => {
   });
 
   const [showLogin, setShowLogin] = useState(false);
+  const API_BASE = 'http://localhost:3000'; // Backend URL
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,26 +22,55 @@ const FreelancerSignup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Freelancer signup data:', formData);
-    // Here you would typically send the data to your backend
-    // On success, redirect to profile setup page
-    // window.location.href = '/profile-setup';
+
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      // Destructure formData to exclude confirmPassword and agreeToTerms for the API call
+      const { confirmPassword, ...signupData } = formData;
+      console.log(formData)
+
+      const response = await axios.post(`${API_BASE}/freelancer/signup`, { name: formData.name, email: formData.email, password: formData.password, joinedOn: Date.now() });
+
+      if (response.data.status === "success") {
+        alert("Signup Successful!");
+        window.location.href = '/freelancer/auth';
+      }
+    } catch (error) {
+      console.error('Signup error:', error.response?.data?.message || error.message);
+      alert('Signup failed');
+    }
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempted with:', {
-      email: formData.email,
-      password: formData.password
-    });
-    // Handle login logic
+    try {
+      const response = await axios.post(`${API_BASE}/freelancer/login`, {
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.data.status == "success") {
+        localStorage.setItem('freelancerId', response.data.id);
+        localStorage.setItem('freelancerName', response.data.name);
+        localStorage.setItem('auth', false);
+        window.location.href = '/freelancer/dashboard';
+      }
+    } catch (error) {
+      console.error('Login error:', error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || 'Login failed');
+    }
   };
 
   const handleLinkedInAuth = () => {
     try {
-      window.location.href = "http://localhost:3000/auth/linkedin";
+      localStorage.setItem('auth', true)
+      window.location.href = `${API_BASE}/auth2/linkedin`;
     } catch (err) {
       console.log(err)
     }
@@ -47,7 +78,8 @@ const FreelancerSignup = () => {
 
   const handleGithubAuth = () => {
     try {
-      window.location.href = "http://localhost:3000/auth/github";
+      localStorage.setItem('auth', true)
+      window.location.href = `${API_BASE}/auth/github`;
     } catch (err) {
       console.log(err)
     }
@@ -159,7 +191,6 @@ const FreelancerSignup = () => {
                     />
                   </div>
                 </div>
-
                 {/* Terms and Submission */}
                 <div className="mb-6">
                   <div className="flex items-center">
