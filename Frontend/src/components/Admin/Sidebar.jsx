@@ -6,7 +6,7 @@ function Sidebar({ menuItems }) {
   const location = useLocation();
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 px-4 py-6">
+    <div className=" sticky top-0 left-0 w-64 bg-white border-r border-gray-200 px-4 py-6">
       <div className="flex items-center gap-3 mb-8">
         <Briefcase className="w-8 h-8 text-accent-600" />
         <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
