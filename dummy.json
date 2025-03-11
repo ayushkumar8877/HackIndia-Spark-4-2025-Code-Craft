@@ -1,0 +1,53 @@
+[
+    {
+      "freelancerId": "67ceb977518cfa94c9383afb",
+      "title": "E-commerce Website",
+      "categories": ["Web Development", "UI/UX"],
+      "description": "A complete e-commerce solution with payment integration and inventory management.",
+      "imageUrl": "https://via.placeholder.com/300",
+      "liveDemoUrl": "https://example.com/ecommerce",
+      "repositoryUrl": "https://github.com/user/ecommerce-project",
+      "createdAt": "2025-03-10T12:00:00.000Z"
+    },
+    {
+      "freelancerId": "67ceb977518cfa94c9383afb",
+      "title": "Portfolio Website",
+      "categories": ["Web Development", "Frontend"],
+      "description": "A personal portfolio showcasing projects, skills, and experience.",
+      "imageUrl": "https://via.placeholder.com/300",
+      "liveDemoUrl": "https://example.com/portfolio",
+      "repositoryUrl": "https://github.com/user/portfolio-project",
+      "createdAt": "2025-03-09T14:30:00.000Z"
+    },
+    {
+      "freelancerId": "67ceb977518cfa94c9383afb",
+      "title": "Mobile Fitness App",
+      "categories": ["Mobile Development", "UI/UX"],
+      "description": "A fitness tracking app with social features and progress analytics.",
+      "imageUrl": "https://via.placeholder.com/300",
+      "liveDemoUrl": "https://example.com/fitness-app",
+      "repositoryUrl": "https://github.com/user/fitness-app",
+      "createdAt": "2025-03-08T09:15:00.000Z"
+    },
+    {
+      "freelancerId": "67ceb977518cfa94c9383afb",
+      "title": "AI Resume Builder",
+      "categories": ["AI", "Web Development"],
+      "description": "An AI-powered resume builder that generates optimized CVs.",
+      "imageUrl": "https://via.placeholder.com/300",
+      "liveDemoUrl": "https://example.com/resume-builder",
+      "repositoryUrl": "https://github.com/user/resume-builder",
+      "createdAt": "2025-03-07T16:45:00.000Z"
+    },
+    {
+      "freelancerId": "67ceb977518cfa94c9383afb",
+      "title": "Brand Identity Design",
+      "categories": ["Graphic Design", "Branding"],
+      "description": "Complete brand identity including logo, color palette, and style guide.",
+      "imageUrl": "https://via.placeholder.com/300",
+      "liveDemoUrl": "",
+      "repositoryUrl": "",
+      "createdAt": "2025-03-06T11:20:00.000Z"
+    }
+  ]
+  

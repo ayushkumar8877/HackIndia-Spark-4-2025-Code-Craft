@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 // Models
 const Freelancer = require("../Models/Freelancers");
 const Applications = require("../Models/Applications");
+const Portfolio = require("../Models/Portfolio");
 
 // Hash Password
 const hashPassword = async (password) => {
@@ -68,6 +69,28 @@ router.post("/apply", async (req, res) => {
     const application = new Applications(req.body);
     await application.save();
     res.status(200).send({ status: "success" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Add portfolio
+router.post("/portfolio", async (req, res) => {
+  try {
+    const portfolio = new Portfolio(req.body);
+    await portfolio.save();
+    res.status(200).send({ status: "success" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Get portfolio
+router.get("/portfolio", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const portfolio = await Portfolio.find({ freelancerId: id });
+    res.status(200).send(portfolio);
   } catch (err) {
     console.log(err);
   }

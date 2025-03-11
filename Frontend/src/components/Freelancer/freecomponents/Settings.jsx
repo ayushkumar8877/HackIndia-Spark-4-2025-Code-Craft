@@ -1,31 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ProfileSettingsPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
-  // Profile data state from your existing code
+  const [profileExists, setProfileExists] = useState(false);
+
+  // Profile data state
   const [profileData, setProfileData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    title: 'Full Stack Developer',
-    bio: 'Experienced developer with 5+ years building web applications using React, Node.js, and MongoDB.',
-    hourlyRate: 75,
-    skills: ['React', 'JavaScript', 'Node.js', 'MongoDB', 'Express'],
-    location: 'San Francisco, CA',
+    name: '',
+    email: '',
+    title: '',
+    bio: '',
+    hourlyRate: 0,
+    skills: [],
+    location: '',
     profilePicture: null,
-    phoneNumber: '+1 (555) 123-4567',
-    website: 'https://johndoe.dev',
-    github: 'johndoe',
-    linkedin: 'john-doe'
+    profilePicturePreview: null,
+    phoneNumber: '',
+    website: '',
+    github: '',
+    linkedin: ''
   });
+
+  // Check if profile exists
+  useEffect(() => {
+    const checkProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        const response = await axios.get('/api/profile/check', {
+          headers: {
+            'x-auth-token': token
+          }
+        });
+
+        setProfileExists(response.data.success);
+
+        if (response.data.success) {
+          fetchProfileData();
+        }
+      } catch (error) {
+        console.error('Error checking profile:', error);
+      }
+    };
+
+    checkProfile();
+  }, [navigate]);
+
+  // Fetch profile data if it exists
+  const fetchProfileData = async () => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+
+      const response = await axios.get('/api/profile', {
+        headers: {
+          'x-auth-token': token
+        }
+      });
+
+      const profile = response.data;
+
+      setProfileData({
+        name: profile.name || '',
+        email: profile.email || '',
+        title: profile.title || '',
+        bio: profile.bio || '',
+        hourlyRate: profile.hourlyRate || 0,
+        skills: profile.skills || [],
+        location: profile.location || '',
+        profilePicture: null,
+        profilePicturePreview: profile.profilePicture ? `${profile.profilePicture}` : null,
+        phoneNumber: profile.phoneNumber || '',
+        website: profile.website || '',
+        github: profile.github || '',
+        linkedin: profile.linkedin || ''
+      });
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setErrorMessage('Failed to load profile data. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleProfileChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    
+
     if (type === 'file') {
       // Create a preview URL for the file
       const file = files[0];
@@ -70,29 +139,47 @@ const ProfileSettingsPage = () => {
     setIsLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
-    
+
     try {
-      // Simulating API call with a timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would make an actual API call to update the profile
-      // const response = await fetch('/api/profile', {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(profileData)
-      // });
-      
-      // if (!response.ok) throw new Error('Failed to update profile');
-      
-      setSuccessMessage('Profile updated successfully!');
-      
-      // Redirect to profile page after a brief delay
-      setTimeout(() => {
-        navigate('/profile');
-      }, 2000);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      // Create FormData for file upload
+      const formData = new FormData();
+
+      // Add text fields to FormData
+      Object.keys(profileData).forEach(key => {
+        if (key === 'skills') {
+          formData.append(key, profileData[key].join(','));
+        } else if (key === 'profilePicture' && profileData[key] instanceof File) {
+          formData.append(key, profileData[key]);
+        } else if (key !== 'profilePicturePreview') {
+          formData.append(key, profileData[key]);
+        }
+      });
+
+      // Make the API call
+      const response = await axios.post('/api/profile', formData, {
+        headers: {
+          'x-auth-token': token,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (response.data.success) {
+        setSuccessMessage('Profile updated successfully!');
+
+        // Redirect to profile page after a brief delay
+        setTimeout(() => {
+          navigate('/profile');
+        }, 2000);
+      }
     } catch (error) {
-      setErrorMessage('Failed to update profile. Please try again.');
       console.error('Error updating profile:', error);
+      setErrorMessage(error.response?.data?.message || 'Failed to update profile. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -101,27 +188,11 @@ const ProfileSettingsPage = () => {
   useEffect(() => {
     // Clean up any created object URLs when the component unmounts
     return () => {
-      if (profileData.profilePicturePreview) {
+      if (profileData.profilePicturePreview && !profileData.profilePicturePreview.startsWith('/uploads')) {
         URL.revokeObjectURL(profileData.profilePicturePreview);
       }
     };
   }, [profileData.profilePicturePreview]);
-
-  // Simulating fetch of user profile data on component mount
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // Here you would make an actual API call to get the profile data
-        // const response = await fetch('/api/profile');
-        // const data = await response.json();
-        // setProfileData(data);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-    
-    fetchProfile();
-  }, []);
 
   return (
     <div className="w-full min-h-screen bg-gray-50 py-10">
@@ -147,7 +218,7 @@ const ProfileSettingsPage = () => {
             {errorMessage}
           </div>
         )}
-        
+
         <div className="bg-white rounded-lg shadow-sm p-8">
           <form onSubmit={handleProfileSubmit}>
             {/* Profile Picture */}
@@ -157,9 +228,9 @@ const ProfileSettingsPage = () => {
                 <div className="mr-4">
                   <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                     {profileData.profilePicturePreview ? (
-                      <img 
-                        src={profileData.profilePicturePreview} 
-                        alt="Profile preview" 
+                      <img
+                        src={profileData.profilePicturePreview}
+                        alt="Profile preview"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -322,13 +393,13 @@ const ProfileSettingsPage = () => {
                 <label className="block mb-2 text-sm font-medium text-gray-700">Skills</label>
                 <div className="mb-3 flex flex-wrap gap-2">
                   {profileData.skills.map((skill, index) => (
-                    <span 
-                      key={index} 
+                    <span
+                      key={index}
                       className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full"
                     >
                       {skill}
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => handleSkillRemove(skill)}
                         className="ml-2 text-blue-600 hover:text-blue-800"
                       >
@@ -350,11 +421,10 @@ const ProfileSettingsPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`px-6 py-3 ${
-                  isLoading 
-                    ? 'bg-blue-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700'
-                } text-white rounded-lg font-medium flex items-center`}
+                className={`px-6 py-3 ${isLoading
+                  ? 'bg-blue-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+                  } text-white rounded-lg font-medium flex items-center`}
               >
                 {isLoading ? (
                   <>
