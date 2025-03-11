@@ -198,4 +198,56 @@ router.put("/profile", async (req, res) => {
   }
 });
 
+// Business Dashboard
+router.get("/hiring-data", async (req, res) => {
+  try {
+    const { businessId } = req.query;
+
+    if (!businessId) {
+      return res.status(400).json({ error: "Missing businessId" });
+    }
+
+    const hiringData = await Employee.aggregate([
+      { $match: { businessId } },
+      {
+        $group: {
+          _id: { $month: "$joinedOn" },
+          total: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.json(hiringData);
+  } catch (err) {
+    console.error("Error fetching hiring data:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Fetch stats
+router.get("/stats", async (req, res) => {
+  try {
+    const activeFreelancers = await Employees.countDocuments();
+    const openPositions = await JobPostings.countDocuments();
+    const totalSpent = await Employees.aggregate([
+      { $group: { _id: null, total: { $sum: "$salary" } } },
+    ]);
+    const avgTimeToHire = await Employees.aggregate([
+      { $group: { _id: null, avg: { $avg: "$joinedOn" } } },
+    ]);
+
+    const stats = {
+      activeFreelancers,
+      openPositions,
+      totalSpent,
+      avgTimeToHire,
+    };
+
+    res.send(stats);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;
