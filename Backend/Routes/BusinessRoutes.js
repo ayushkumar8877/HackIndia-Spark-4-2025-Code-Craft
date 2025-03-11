@@ -207,11 +207,16 @@ router.get("/hiring-data", async (req, res) => {
       return res.status(400).json({ error: "Missing businessId" });
     }
 
-    const hiringData = await Employee.aggregate([
+    const hiringData = await Employees.aggregate([
       { $match: { businessId } },
       {
+        $project: {
+          month: { $month: { $toDate: "$joinedOn" } }, // Ensure it's a Date
+        },
+      },
+      {
         $group: {
-          _id: { $month: "$joinedOn" },
+          _id: "$month",
           total: { $sum: 1 },
         },
       },
@@ -230,23 +235,51 @@ router.get("/stats", async (req, res) => {
   try {
     const activeFreelancers = await Employees.countDocuments();
     const openPositions = await JobPostings.countDocuments();
-    const totalSpent = await Employees.aggregate([
-      { $group: { _id: null, total: { $sum: "$salary" } } },
+
+    const totalSpentResult = await Employees.aggregate([
+      { $group: { _id: null, total: { $sum: { $toDouble: "$salary" } } } },
     ]);
-    const avgTimeToHire = await Employees.aggregate([
-      { $group: { _id: null, avg: { $avg: "$joinedOn" } } },
-    ]);
+    const totalSpent =
+      totalSpentResult.length > 0 ? totalSpentResult[0].total : 0;
 
     const stats = {
       activeFreelancers,
       openPositions,
       totalSpent,
-      avgTimeToHire,
     };
 
-    res.send(stats);
+    console.log(stats);
+
+    res.json(stats);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Fetch applications
+router.get("/applications2", async (req, res) => {
+  try {
+    const businessId = req.query.businessId;
+
+    if (!businessId) {
+      return res.status(400).json({ error: "businessId is required" });
+    }
+
+    console.log("Received businessId:", businessId);
+
+    // Fetch applications based on the company ID
+    const applications = await Applications.find({
+      companyId: businessId,
+    }).lean();
+
+    console.log("Applications found:", applications);
+
+    // Ensure applications are sent properly
+    res.status(200).json({ success: true, data: applications });
+  } catch (err) {
+    console.error("Error fetching applications:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
